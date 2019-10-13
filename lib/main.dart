@@ -1,71 +1,101 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-import 'package:english_words/english_words.dart' as prefix0;
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // title: 'Welcome to Flutter',
-      // home: Scaffold(
-      //   appBar: AppBar(
-      //     title: Text('Welcome to Flutter'),
-      //   ),
-      //   body: Center(
-      //     child: RandomWelcome(),
-      //   ),
-      // ),
-      title: 'Startup Name Generator',
-      home: RandomWelcome(),
-    );
-  }
-}
+    Color color = Theme.of(context).primaryColor;
 
-class RandomWelcomeState extends State<RandomWelcome> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  Widget _suggestionList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-        if (i.isOdd) {
-          return Divider();
-        }
-        final index = i ~/ 2;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
-        return _buildRow(_suggestions[index]);
-      },
-    );
-  }
-
-  Widget _buildRow(WordPair pair) {
-    return ListTile(title: Text(pair.asPascalCase, style: _biggerFont));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
+    Widget buttonSection = Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildButtonColumn(color, Icons.call, 'CALL'),
+          _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
+          _buildButtonColumn(color, Icons.share, 'SHARE')
+        ],
       ),
-      body: _suggestionList(),
+    );
+
+    // TODO: implement build
+    return MaterialApp(
+      title: 'Flutter layout demo',
+      // theme: ThemeData(primaryColor: Colors.white),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter layout demo'),
+        ),
+        body: ListView(
+          children: <Widget>[
+            Image.asset(
+              'images/lake.jpg',
+              width: 600,
+              height: 240,
+              fit: BoxFit.cover,
+            ),
+            titleSection,
+            buttonSection,
+            textSection
+          ],
+        ),
+      ),
     );
   }
 }
 
-class RandomWelcome extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return RandomWelcomeState();
-  }
+Widget titleSection = Container(
+  padding: const EdgeInsets.all(32),
+  child: Row(
+    children: <Widget>[
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'Oeschinen Lake Campground',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )),
+            Text(
+              'Kandersteg, Switzerland',
+              style: TextStyle(color: Colors.grey[500]),
+            )
+          ],
+        ),
+      ),
+      Icon(
+        Icons.star,
+        color: Colors.red[500],
+      ),
+      Text('41')
+    ],
+  ),
+);
+
+Column _buildButtonColumn(Color color, IconData icon, String label) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Icon(icon, color: color),
+      Container(
+        margin: const EdgeInsets.only(top: 8),
+        child: Text(
+          label,
+          style: TextStyle(
+              fontWeight: FontWeight.w400, fontSize: 12, color: color),
+        ),
+      )
+    ],
+  );
 }
+
+Widget textSection = Container(
+  padding: const EdgeInsets.all(32),
+  child: Text(
+    'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.',
+    softWrap: true,
+  ),
+);
